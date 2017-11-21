@@ -13,19 +13,22 @@
 
 ActiveRecord::Schema.define(version: 20150405053726) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "account_versions", force: true do |t|
     t.integer  "member_id"
     t.integer  "account_id"
     t.integer  "reason"
     t.decimal  "balance",         precision: 32, scale: 16
     t.decimal  "locked",          precision: 32, scale: 16
-    t.decimal  "fee",             precision: 32, scale: 16
     t.decimal  "amount",          precision: 32, scale: 16
     t.integer  "modifiable_id"
     t.string   "modifiable_type"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "currency"
+    t.decimal  "fee",             precision: 32, scale: 16
     t.integer  "fun"
   end
 
@@ -111,18 +114,18 @@ ActiveRecord::Schema.define(version: 20150405053726) do
 
   create_table "deposits", force: true do |t|
     t.integer  "account_id"
-    t.integer  "member_id"
-    t.integer  "currency"
     t.decimal  "amount",                 precision: 32, scale: 16
-    t.decimal  "fee",                    precision: 32, scale: 16
-    t.string   "fund_uid"
-    t.string   "fund_extra"
     t.string   "txid"
     t.integer  "state"
-    t.string   "aasm_state"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "member_id"
+    t.integer  "currency"
     t.datetime "done_at"
+    t.string   "fund_uid"
+    t.string   "fund_extra"
+    t.decimal  "fee",                    precision: 32, scale: 16
+    t.string   "aasm_state"
     t.string   "confirmations"
     t.string   "type"
     t.integer  "payment_transaction_id"
@@ -157,14 +160,14 @@ ActiveRecord::Schema.define(version: 20150405053726) do
   end
 
   create_table "fund_sources", force: true do |t|
-    t.integer  "member_id"
-    t.integer  "currency"
     t.string   "extra"
     t.string   "uid"
     t.boolean  "is_locked",  default: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "deleted_at"
+    t.integer  "member_id"
+    t.integer  "currency"
   end
 
   create_table "id_documents", force: true do |t|
@@ -197,7 +200,6 @@ ActiveRecord::Schema.define(version: 20150405053726) do
 
   create_table "members", force: true do |t|
     t.string   "sn"
-    t.string   "display_name"
     t.string   "email"
     t.integer  "identity_id"
     t.datetime "created_at"
@@ -206,6 +208,7 @@ ActiveRecord::Schema.define(version: 20150405053726) do
     t.boolean  "activated"
     t.integer  "country_code"
     t.string   "phone_number"
+    t.string   "display_name"
     t.boolean  "disabled",     default: false
     t.boolean  "api_disabled", default: false
     t.string   "nickname"
@@ -301,12 +304,12 @@ ActiveRecord::Schema.define(version: 20150405053726) do
     t.integer  "confirmations"
     t.string   "address"
     t.integer  "state"
-    t.string   "aasm_state"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "receive_at"
     t.datetime "dont_at"
     t.integer  "currency"
+    t.string   "aasm_state"
     t.string   "type",          limit: 60
     t.integer  "txout"
   end
@@ -451,18 +454,18 @@ ActiveRecord::Schema.define(version: 20150405053726) do
   add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
 
   create_table "withdraws", force: true do |t|
-    t.string   "sn"
     t.integer  "account_id"
-    t.integer  "member_id"
-    t.integer  "currency"
     t.decimal  "amount",     precision: 32, scale: 16
-    t.decimal  "fee",        precision: 32, scale: 16
     t.string   "fund_uid"
-    t.string   "fund_extra"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.datetime "done_at"
     t.string   "txid"
+    t.string   "fund_extra"
+    t.datetime "done_at"
+    t.integer  "member_id"
+    t.integer  "currency"
+    t.decimal  "fee",        precision: 32, scale: 16
+    t.string   "sn"
     t.string   "aasm_state"
     t.decimal  "sum",        precision: 32, scale: 16, default: 0.0, null: false
     t.string   "type"

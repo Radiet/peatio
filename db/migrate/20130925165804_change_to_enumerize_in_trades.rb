@@ -1,7 +1,7 @@
 class ChangeToEnumerizeInTrades < ActiveRecord::Migration
   def up
-    change_column :trades, :trend, :integer
-    change_column :trades, :currency, :integer
+    change_column :trades, :trend, 'integer USING CAST(trend AS integer)'
+    change_column :trades, :currency, 'integer USING CAST(currency AS integer)'
   end
 
   def down
